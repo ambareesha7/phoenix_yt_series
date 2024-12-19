@@ -11,8 +11,7 @@ defmodule PhoenixYtSeries.Application do
       PhoenixYtSeriesWeb.Telemetry,
       PhoenixYtSeries.Repo,
       {Ecto.Migrator,
-        repos: Application.fetch_env!(:phoenix_yt_series, :ecto_repos),
-        skip: skip_migrations?()},
+       repos: Application.fetch_env!(:phoenix_yt_series, :ecto_repos), skip: skip_migrations?()},
       {DNSCluster, query: Application.get_env(:phoenix_yt_series, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: PhoenixYtSeries.PubSub},
       # Start the Finch HTTP client for sending emails

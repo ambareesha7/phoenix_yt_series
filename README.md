@@ -1,5 +1,7 @@
 # PhoenixYtSeries
 
+This repo is for YouTube tutorial series on Phoenix and LiveView
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies

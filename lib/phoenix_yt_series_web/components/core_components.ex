@@ -19,6 +19,52 @@ defmodule PhoenixYtSeriesWeb.CoreComponents do
 
   alias Phoenix.LiveView.JS
 
+  def get_page_title(module) do
+    module
+    |> Module.split()
+    |> List.last()
+  end
+
+  attr :id, :string, required: true
+  attr :list, :list, required: true
+  attr :item_click, :any, default: nil, doc: "the function for handling phx-click on each item"
+
+  def dropdown_comp(assigns) do
+    ~H"""
+    <div class="relative flex items-start">
+      <button
+        class=" hover:bg-violet-100 active:bg-violet-700 focus:bg-violet-100
+        justify-center items-center p-0 "
+        phx-click={JS.toggle(to: "##{@id}", in: "fade-in-scale", out: "fade-out-scale")}
+        phx-click-away={JS.hide(to: "##{@id}")}
+        phx-keydown={JS.hide(to: "##{@id}")}
+        phx-key="escape"
+      >
+        <div class="flex">
+          <span class="px-2 invisible sm:visible">Select route</span>
+          <.icon name="hero-bars-3" class="sm:hero-chevron-down" />
+        </div>
+      </button>
+    </div>
+    <div
+      id={@id}
+      class="absolute hidden mt-[0%] grid justify-start z-50 bg-violet-100 rounded-sm  p-2"
+    >
+      <div
+        :for={item <- @list}
+        value={"item #{item}"}
+        phx-click={@item_click && @item_click.(item)}
+        class={[
+          "relative p-2 hover:bg-violet-500 active:bg-violet-700",
+          @item_click && "hover:cursor-pointer"
+        ]}
+      >
+        {item}
+      </div>
+    </div>
+    """
+  end
+
   @doc """
   Renders a modal.
 

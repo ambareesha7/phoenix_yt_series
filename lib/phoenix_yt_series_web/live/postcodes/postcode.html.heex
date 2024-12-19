@@ -1,0 +1,14 @@
+<div class="text-3xl  font-bold pb-5">
+  Postal Pincodes
+</div>
+<div>
+  <button
+    :if={!@show_upload}
+    phx-click="uploaded"
+    phx-value-uploaded={"#{!@show_upload}"}
+    class=" p-2 bg-teal-50 hover:bg-teal-300"
+  >
+    Show upload option
+  </button>
+  <.pincode_uploads :if={@show_upload} uploads={@uploads} />
+</div>

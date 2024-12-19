@@ -17,7 +17,9 @@ defmodule PhoenixYtSeriesWeb.Router do
   scope "/", PhoenixYtSeriesWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    # get "/", PageController, :home
+    live "/", Live.Home
+    live "/postcodes", Live.Postcode
   end
 
   # Other scopes may use custom stacks.
