@@ -20,12 +20,12 @@ defmodule PhoenixYtSeriesWeb.Live.Home do
           Build postal pincode search engin in LiveView
         </div>
         <div class="  text-2xl pb-1 font-bold">
-          Part-1
+          Part-2
         </div>
         <ol class="list-disc text-2xl ">
-          <li class="  text-2xl pb-1 font-bold">Upload CSV file of pincodes</li>
-          <li>Add data from uploaded CSV file to DB</li>
-          <li>Build search feature</li>
+          <li>Upload CSV file of pincodes</li>
+          <li class="text-2xl pb-1 font-bold">Add data from uploaded CSV file to DB</li>
+          <li class="text-2xl pb-1 font-bold">Build searchable features</li>
         </ol>
       </div>
     </div>

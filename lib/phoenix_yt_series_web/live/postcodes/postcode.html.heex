@@ -1,14 +1,96 @@
-<div class="text-3xl  font-bold pb-5">
+<div class="text-3xl pb-5">
   Postal Pincodes
 </div>
-<div>
+<div class="flex ">
   <button
-    :if={!@show_upload}
     phx-click="uploaded"
-    phx-value-uploaded={"#{!@show_upload}"}
-    class=" p-2 bg-teal-50 hover:bg-teal-300"
+    phx-value-show={"#{@show_upload}"}
+    class=" px-2 mx-2 bg-teal-50 hover:bg-teal-300"
   >
-    Show upload option
+    {if @show_upload, do: "Hide", else: "Show upload option"}
   </button>
+  <%!-- <.pincode_uploads uploads={@uploads} /> --%>
   <.pincode_uploads :if={@show_upload} uploads={@uploads} />
 </div>
+<%!-- Search area --%>
+<div class="container mx-auto px-20 py-8 bg-white rounded-lg shadow-md mt-0 w-full ">
+  <p class="text-gray-700 mb-6">Search for PIN codes/Postal codes in India</p>
+  <div class="flex justify-center gap-2">
+    <div class="rounded-md border-2 w-full justify-center">
+      <.dropdown_comp
+        id="states"
+        btn_name={if @state == nil, do: "Select state", else: @state}
+        list={@states}
+        item_click={fn e -> JS.push("state", value: %{state: e}) end}
+      />
+    </div>
+    <div :if={@state != nil} class="rounded-md border-2 w-full justify-center">
+      <.dropdown_comp
+        id="districts"
+        btn_name={if @district == nil, do: "Select district", else: @district}
+        list={@districts}
+        item_click={fn e -> JS.push("district", value: %{district: e}) end}
+      />
+    </div>
+    <div :if={@district != nil} class="rounded-md border-2 w-full justify-center">
+      <.dropdown_comp
+        id="offices_dropdown"
+        btn_name={if @office_name == nil, do: "Select post office", else: @office_name}
+        list={@offices_dropdown}
+        item_click={fn e -> JS.push("offices_dropdown", value: %{post_office: e}) end}
+      />
+    </div>
+  </div>
+  <%!-- Search box --%>
+  <div class="flex p-2">
+    <.form for={@form} id="search-1" phx-submit="search" phx-change="validate" class="flex">
+      <input
+        type="text"
+        name="pincode"
+        required
+        placeholder="Type pincode or name"
+        class="border border-gray-300 rounded px-3 py-2 w-full md:flex-grow"
+      />
+      <button
+        type="submit"
+        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      >
+        SEARCH
+      </button>
+    </.form>
+  </div>
+</div>
+<%!-- Detailed post office table --%>
+<.build_post_office :if={@post_office != nil} name={@office_name} post_office={@post_office} />
+<%!-- Search results based on name --%>
+<.build_post_office_table
+  :if={@searched && @office_name != nil}
+  stream_id="searched_post_offices"
+  event_name="post_offices"
+  name={"Search result of #{@office_name}"}
+  items_list={@streams.post_offices_list}
+/>
+<%!-- same pincode offices --%>
+<.build_post_office_table
+  :if={@post_office != nil}
+  name="Post offices in same pincode"
+  stream_id="same_pincode"
+  event_name="same_pincode"
+  items_list={@streams.same_pincode_offices}
+/>
+<%!-- post offices table --%>
+<.build_post_office_table
+  :if={length(@offices_dropdown) > 0 && @state != nil && @district != nil}
+  stream_id="post_offices"
+  event_name="post_offices"
+  name={"Post offices of #{@district}"}
+  items_list={@streams.post_offices_list}
+/>
+<%!-- States table --%>
+<.build_states_table :if={is_nil(@state) and length(@states) != 0} states={@states} />
+<%!-- Districts --%>
+<.build_district_table
+  :if={length(@offices_dropdown) == 0 and @state != nil}
+  state={@state}
+  districts_pins={@streams.districts_pins}
+/>
