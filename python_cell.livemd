@@ -1,0 +1,192 @@
+# Python Integration
+
+```elixir
+Mix.install([
+  {:py_cell, github: "NduatiK/py_cell"}
+])
+```
+
+## Introduction
+
+This is an example of using the [py_cell](https://github.com/NduatiK/py_cell) module. It allows for some level of integration with Python 3 code.
+
+By installing the module, you gain access to the Python smart cell. This allows you to write python code and expose a single function within this code. That function can be executed by making a single call to `PyCell.run/2`.
+
+It uses the `python3` command on the host machine to evaluate the python code, and has access to the modules available to this installation.
+
+## Function Call Example
+
+<!-- livebook:{"attrs":"eyJmdW5jdGlvbl9uYW1lIjoiYWRkIiwicHl0aG9uX2NvZGUiOiJkZWYgYWRkKGEsIGIpOlxuICByZXR1cm4gYSArIGIifQ","chunks":null,"kind":"Elixir.PyCell","livebook_object":"smart_cell"} -->
+
+```elixir
+require PyCell
+
+code = """
+def add(a, b):
+  return a + b
+"""
+
+PyCell.open_port("add", code)
+```
+
+```elixir
+PyCell.run("add", [1, 2])
+```
+
+## Module Import Example
+
+<!-- livebook:{"attrs":"eyJmdW5jdGlvbl9uYW1lIjoiZ2V0X3BpIiwicHl0aG9uX2NvZGUiOiJpbXBvcnQgbWF0aFxuXG5kZWYgZ2V0X3BpKCk6XG4gIHJldHVybiBtYXRoLnBpIn0","chunks":null,"kind":"Elixir.PyCell","livebook_object":"smart_cell"} -->
+
+```elixir
+require PyCell
+
+code = """
+import math
+
+def get_pi():
+  return math.pi
+"""
+
+PyCell.open_port("get_pi", code)
+```
+
+```elixir
+PyCell.run("get_pi", [])
+```
+
+````elixir
+# Module 8: Circles
+
+```elixir
+Mix.install([
+  {:vega_lite, "~> 0.1.10"},
+  {:kino_vega_lite, "~> 0.1.13"}
+])
+```
+
+## Preparation
+
+Lets take a look at a definition of a circle type that covers the center point and radius:
+
+```elixir
+defmodule Circle do
+  defstruct [:x, :y, :r]
+end
+```
+
+This allows us to create instances of circles:
+
+```elixir
+circle = %Circle{x: 1, y: 2, r: 3}
+```
+
+We can access the fields as with any other struct:
+
+```elixir
+"The circle has a radius of #{circle.r} and its center is at (#{circle.x}, #{circle.y})."
+```
+
+## Exercise
+
+Lets use this type to declare a number of circles:
+
+```elixir
+circles = [
+  %Circle{x: 0, y: 0, r: 1.13137},
+  %Circle{x: -2, y: -3.5, r: -0.7071},
+  %Circle{x: 2.5, y: 3, r: 1.4142},
+  %Circle{x: -4, y: -2.5, r: 0.7071},
+  %Circle{x: -2.5, y: 3, r: 1.4142},
+  %Circle{x: 0, y: -4, r: -0.7071},
+  %Circle{x: 2, y: -3.5, r: 0.7071},
+  %Circle{x: 0, y: 0, r: -4.596},
+  %Circle{x: 4, y: -2.5, r: 0.7071},
+]
+```
+
+Some of these circles have a negative radiuses. That is no good. In the next cell, write code that flips the negative radiuses (by multiplying them by $-1$). Rebind the `circles` variable to the resulting data structure.
+
+```elixir
+
+```
+
+Write some code that calculates the total area of these circles.
+
+The area of a circle with radius $r$ is:
+
+$
+\hspace{20mm}
+A(r) = \pi r^2
+$
+
+```elixir
+
+```
+
+Write a function that takes a radius as a single input (lets call it $r_{in}$) and returns another raidus (we will call that one $r_{out}$). You decide whether to make the function anonymous or place it in a module. Make sure that the area of a circle with a radius of $r_{out}$ is twice as large as one with a radius of $r_{in}$. In other words, make sure that:
+
+$
+\hspace{20mm}
+A(r_{out}) = 2 \cdot A(r_{in})
+$
+
+For this, you may want to try out the built-in [:math.sqrt](https://www.erlang.org/doc/apps/stdlib/math.html#sqrt/1) function that calculates the square root of its parameter.
+
+```elixir
+
+```
+
+Use the function you have just defined to double the area of each of the circles in the variable `circles` and rebind this variable to the resulting data structure:
+
+```elixir
+
+```
+
+The distance $D$ between the points $P_1 : (x_1, y_1)$ and $P_2 : (x_2, y_2)$ can be calculated using the [Pythagorean theorem](https://en.wikipedia.org/wiki/Pythagorean_theorem):
+
+$
+\hspace{20mm}
+D = \sqrt{(x_2-x_1)^2 + (x_2-x_1)^2}
+$
+
+Implement a function that takes two circles as parameters and returns the distance between their centers. You decide whether it be an anonymous function or one that recides in a module.
+
+```elixir
+
+```
+
+Now, calculate the largest distance between the centers of any two circles in `circles`.
+
+Hints:
+
+* In order to find all combinations of elements from two lists, one can place one call to [Enum.map](https://hexdocs.pm/elixir/1.16.1/Enum.html#map/2) inside of another.
+* The [List.flatten](https://hexdocs.pm/elixir/1.16.1/List.html#flatten/1) function will convert a list of lists to simply a list of all the values.
+* The [Enum.max](https://hexdocs.pm/elixir/1.16.1/Enum.html#max/1) function will give you the largest element of a list.
+
+```elixir
+
+```
+
+The time has come to plot these circles. I have written some code that can plot data, but unfortunately this code doesn't know how to work with structs. Instead, it needs a list of maps where alle keys are strings. So, your job is to preprocess the data in `circles` in such a way that it adheres to the format supported by my code. Bind a variable called `data` to the resulting data structure.
+
+```elixir
+
+```
+
+```elixir
+alias VegaLite, as: Vl
+```
+
+```elixir
+Vl.new(width: 400, height: 300)
+|> Vl.data_from_values(data)
+|> Vl.mark(:point)
+|> Vl.encode_field(:x, "x", type: :quantitative)
+|> Vl.encode_field(:y, "y", type: :quantitative)
+|> Vl.encode_field(:size, "r", type: :nominal, title: "Radius")
+```
+
+## Next step ...
+
+When you have completed this exercise you can continue [here](module9.livemd).
+````
