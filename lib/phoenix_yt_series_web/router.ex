@@ -20,6 +20,7 @@ defmodule PhoenixYtSeriesWeb.Router do
     # get "/", PageController, :home
     live "/", Live.Home
     live "/postcodes", Live.Postcode
+    live "/chat", Live.Chat
   end
 
   # Other scopes may use custom stacks.

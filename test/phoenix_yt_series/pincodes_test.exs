@@ -21,7 +21,7 @@ defmodule PhoenixYtSeries.PincodesTest do
     end
 
     test "create_pincode_india/1 with valid data creates a pincode_india" do
-      valid_attrs = %{circle_name: "some circle_name"}
+      valid_attrs = pincode_valid_attr()
 
       assert {:ok, %PincodeIndia{} = pincode_india} = Pincodes.create_pincode_india(valid_attrs)
       assert pincode_india.circle_name == "some circle_name"
@@ -35,13 +35,18 @@ defmodule PhoenixYtSeries.PincodesTest do
       pincode_india = pincode_india_fixture()
       update_attrs = %{circle_name: "some updated circle_name"}
 
-      assert {:ok, %PincodeIndia{} = pincode_india} = Pincodes.update_pincode_india(pincode_india, update_attrs)
+      assert {:ok, %PincodeIndia{} = pincode_india} =
+               Pincodes.update_pincode_india(pincode_india, update_attrs)
+
       assert pincode_india.circle_name == "some updated circle_name"
     end
 
     test "update_pincode_india/2 with invalid data returns error changeset" do
       pincode_india = pincode_india_fixture()
-      assert {:error, %Ecto.Changeset{}} = Pincodes.update_pincode_india(pincode_india, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Pincodes.update_pincode_india(pincode_india, @invalid_attrs)
+
       assert pincode_india == Pincodes.get_pincode_india!(pincode_india.id)
     end
 

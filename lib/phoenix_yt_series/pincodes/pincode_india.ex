@@ -28,6 +28,6 @@ defmodule PhoenixYtSeries.Pincodes.PincodeIndia do
   end
 
   def get_fields() do
-    __schema__(:fields) -- [:inserted_at, :updated_at]
+    __schema__(:fields) -- [:inserted_at, :updated_at, :id]
   end
 end

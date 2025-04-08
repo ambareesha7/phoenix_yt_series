@@ -19,7 +19,10 @@ defmodule PhoenixYtSeries.Application do
       # Start a worker by calling: PhoenixYtSeries.Worker.start_link(arg)
       # {PhoenixYtSeries.Worker, arg},
       # Start to serve requests, typically the last entry
-      PhoenixYtSeriesWeb.Endpoint
+      PhoenixYtSeriesWeb.Endpoint,
+      # Start TwMerge cache
+      TwMerge.Cache,
+      PhoenixYtSeries.Counter
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
