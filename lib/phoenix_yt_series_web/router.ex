@@ -24,9 +24,10 @@ defmodule PhoenixYtSeriesWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", PhoenixYtSeriesWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", PhoenixYtSeriesWeb do
+    pipe_through :api
+    resources "/articles", ArticleController, except: [:new, :edit]
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:phoenix_yt_series, :dev_routes) do
