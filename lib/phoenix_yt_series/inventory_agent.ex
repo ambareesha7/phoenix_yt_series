@@ -1,5 +1,6 @@
-defmodule PhoenixYtSeries.Inventory do
+defmodule PhoenixYtSeries.InventoryAgent do
   use Agent
+  require Logger
 
   def start_link(_opts) do
     Agent.start_link(fn -> %{} end, name: __MODULE__)
@@ -9,12 +10,12 @@ defmodule PhoenixYtSeries.Inventory do
     Agent.get(__MODULE__, fn state -> state end)
   end
 
-  def get_state(key) do
+  def get_state_by_key(key) do
     Agent.get(__MODULE__, fn state -> Map.get(state, key) end)
   end
 
   def check_and_update_state(key, quantity) when quantity <= 100 do
-    case get_state(key) do
+    case get_state_by_key(key) do
       nil ->
         add_new(key, quantity)
 
@@ -22,14 +23,14 @@ defmodule PhoenixYtSeries.Inventory do
         update_state(key, quantity)
 
       qty ->
-        IO.puts(
-          "We have #{key} quantity of #{qty}, Total exceeds by #{qty + quantity - 100}, Max limit is 100"
-        )
+        Logger.info("We have #{key} quantity of #{qty}, Max limit is 100")
+        {:error, "Max limit is 100"}
     end
   end
 
   def check_and_update_state(_key, quantity) when quantity >= 101 do
-    IO.puts("Quantity can't be more than 100")
+    Logger.info("Quantity can't be more than 100")
+    {:error, "Max limit is 100"}
   end
 
   defp add_new(key, quantity) do
@@ -56,7 +57,7 @@ defmodule PhoenixYtSeries.Inventory do
         if val >= quantity do
           val - quantity
         else
-          IO.puts("Quantity can't be removed")
+          Logger.info("Quantity can't be reduced")
           val
         end
       end)
